@@ -1,12 +1,16 @@
 package my;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * Advent of Code 2022: dinmchele implementation
@@ -22,6 +26,8 @@ public class AdventCode2022 {
         day3();
         System.out.println("********************* DAY 4 *********************");
         day4();
+        System.out.println("********************* DAY 5 *********************");
+        day5();
     }
 
     /**
@@ -30,13 +36,13 @@ public class AdventCode2022 {
      */
     public static void day1() throws IOException {
 
-        File file = new File("src/main/resources/source_day1.txt");
-        String input = FileUtils.readFileToString(file, "UTF-8");
+
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day1.txt"));
 
         List<Integer> sums = new ArrayList<>();
         sums.add(0);
 
-        Arrays.stream(input.split(System.lineSeparator())).forEach(e -> {
+        input.forEach(e -> {
             if ((e.length() > 0)) {
                 sums.set(sums.size() - 1, new Integer(e) + sums.get(sums.size() - 1));
             } else {
@@ -59,8 +65,7 @@ public class AdventCode2022 {
      */
     public static void day2() throws IOException {
 
-        File file = new File("src/main/resources/source_day2.txt");
-        String input = FileUtils.readFileToString(file, "UTF-8");
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day2.txt"));
 
         final Integer[] totalScore = {0};
 
@@ -84,7 +89,7 @@ public class AdventCode2022 {
         results.put("CZ", 3); //draw
 
 
-        Arrays.stream(input.split("\n")).forEach(e -> {
+        input.forEach(e -> {
             String[] row = e.split(" ");
             Integer myValue = values.get(row[1]);
             totalScore[0] += myValue + results.get(row[0] + row[1]);
@@ -117,7 +122,7 @@ public class AdventCode2022 {
 
         totalScore[0] = 0;
 
-        Arrays.stream(input.split("\n")).forEach(e -> {
+        input.forEach(e -> {
             String[] row = e.split(" ");
             Integer myValue = values.get(mappedChoice.get(row[0] + expectedResults.get(row[0] + row[1])));
             totalScore[0] +=  myValue + expectedResults.get(row[0] + row[1]);
@@ -186,11 +191,10 @@ public class AdventCode2022 {
      */
     public static void day3() throws IOException {
 
-        File file = new File("src/main/resources/source_day3.txt");
-        String input = FileUtils.readFileToString(file, "UTF-8");
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day3.txt"));
 
         AtomicReference<Integer> sum = new AtomicReference<>(0);
-        Arrays.stream(input.split("\n")).forEach(e -> {
+        input.forEach(e -> {
             String left = e.substring(0, e.length() / 2 );
             String right = e.substring(e.length() / 2 );
             Set<Character> lChars = new HashSet<>();
@@ -223,7 +227,7 @@ public class AdventCode2022 {
         List<List<String>> groupedLines = new ArrayList<>();
         AtomicInteger cycleCount = new AtomicInteger();
         List<String> singleGroup = new ArrayList<>();
-        Arrays.stream(input.split("\n")).forEach(e -> {
+        input.forEach(e -> {
            cycleCount.getAndIncrement();
            singleGroup.add(e);
            if (cycleCount.get() > 2) {
@@ -326,12 +330,11 @@ public class AdventCode2022 {
      */
     public static void day4() throws IOException {
 
-        File file = new File("src/main/resources/source_day4.txt");
-        String input = FileUtils.readFileToString(file, "UTF-8");
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day4.txt"));
 
         AtomicReference<Integer> countPart1 = new AtomicReference<>(0);
         AtomicReference<Integer> countPart2 = new AtomicReference<>(0);
-        Arrays.stream(input.split("\n")).forEach(e -> {
+        input.forEach(e -> {
             String[] parts = e.split(",");
             Integer minLeft = new Integer(parts[0].split("-")[0]);
             Integer maxLeft = new Integer(parts[0].split("-")[1]);
@@ -411,6 +414,58 @@ public class AdventCode2022 {
      * @throws IOException
      */
     public static void day5() throws IOException {
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day5.txt"));
+
+        List<Stack<String>> stacks = new ArrayList<>();
+        /*
+                            [B]     [L]     [S]
+                    [Q] [J] [C]     [W]     [F]
+                [F] [T] [B] [D]     [P]     [P]
+                [S] [J] [Z] [T]     [B] [C] [H]
+                [L] [H] [H] [Z] [G] [Z] [G] [R]
+            [R] [H] [D] [R] [F] [C] [V] [Q] [T]
+            [C] [J] [M] [G] [P] [H] [N] [J] [D]
+            [H] [B] [R] [S] [R] [T] [S] [R] [L]
+             1   2   3   4   5   6   7   8   9
+         */
+        stacks.add(new Stack<>()); stacks.get(0).addAll(List.of(new String[]{"H","C","R"}));
+        stacks.add(new Stack<>()); stacks.get(1).addAll(List.of(new String[]{"B", "J", "H", "L", "S", "F"}));
+        stacks.add(new Stack<>()); stacks.get(2).addAll(List.of(new String[]{"R", "M", "D", "H", "J", "T", "Q"}));
+        stacks.add(new Stack<>()); stacks.get(3).addAll(List.of(new String[]{"S", "G", "R", "H", "Z", "B", "J"}));
+        stacks.add(new Stack<>()); stacks.get(4).addAll(List.of(new String[]{"R", "P", "F", "Z", "T", "D", "C","B"}));
+        stacks.add(new Stack<>()); stacks.get(5).addAll(List.of(new String[]{"T", "H", "C", "G"}));
+        stacks.add(new Stack<>()); stacks.get(6).addAll(List.of(new String[]{"S", "N", "V", "Z", "B", "P", "W","L"}));
+        stacks.add(new Stack<>()); stacks.get(7).addAll(List.of(new String[]{"R", "J", "Q", "G", "C"}));
+        stacks.add(new Stack<>()); stacks.get(8).addAll(List.of(new String[]{"L", "D", "T", "R", "H", "P", "F","S"}));
+
+        /*
+            [D]
+        [N] [C]
+        [Z] [M] [P]
+         1   2   3
+         */
+        /*stacks.add(new Stack<>()); stacks.get(0).addAll(List.of(new String[]{"Z", "N"}));
+        stacks.add(new Stack<>()); stacks.get(1).addAll(List.of(new String[]{"M", "C", "D"}));
+        stacks.add(new Stack<>()); stacks.get(2).addAll(List.of(new String[]{"P"}));*/
+        input.forEach(l -> {
+            String[] elements = l.split(" ");
+            Integer index = new Integer(elements[3]);
+            Integer moves = new Integer(elements[1]);
+            Integer target = new Integer(elements[5]);
+            String invertedMoving = "";
+            for (int i=0; i< moves; i++) {
+               // stacks.get(target -1).push(stacks.get(index -1).pop()); --PART1
+                invertedMoving =  stacks.get(index -1).pop() + " " + invertedMoving;
+            }
+            Arrays.stream(invertedMoving.split(" "))
+                    .filter(s -> !(s.equals("") || s.equals("[") || s.equals("]")))
+                    .forEach(v -> stacks.get(target -1).push(v)); //--PART 2
+
+        });
+
+        String result = stacks.stream().map(s -> s.pop()).collect(joining());
+        System.out.println("Solution Day 5: " + result);
+
 
     }
 
