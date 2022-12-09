@@ -697,8 +697,8 @@ public class AdventCode2022 {
 
         AtomicInteger rowIndex = new AtomicInteger();
 
-
         AtomicInteger sum = new AtomicInteger();
+        List<Integer> scenicViews = new ArrayList<>();
         rows.forEach(r -> {
             int columnIndex = 0;
 
@@ -726,6 +726,9 @@ public class AdventCode2022 {
                         sum.getAndIncrement();
                     }
 
+                   scenicViews.add(calculateScenicView(r.get(i), right, left, up, down));
+
+
                 }
 
             }
@@ -734,7 +737,30 @@ public class AdventCode2022 {
 
         int total = sum.get() + (rows.size() *2) + ((rows.get(0).size()-2)*2);
         System.out.println("Day 8 result: " + total);
+        System.out.println("Day 8 result - part 2: " + scenicViews.stream().max(Comparator.naturalOrder()));
 
+    }
+
+    private static Integer calculateScenicView(Integer value, List<String> right, List<String> left, List<String> up, List<String> down) {
+        int rScore = 0, lScore =0, uScore=0, dScore = 0;
+        for (String element:right) {
+            if (Integer.valueOf(element)<value) rScore++;
+            else  {rScore++; break;}
+        }
+        for (String element:left) {
+            if (Integer.valueOf(element)<value) lScore++;
+            else {lScore++; break;}
+        }
+        for (String element:up) {
+            if (Integer.valueOf(element)<value) uScore++;
+            else {uScore++; break;}
+        }
+        for (String element:down) {
+            if (Integer.valueOf(element)<value) dScore++;
+            else {dScore++; break;}
+        }
+
+        return lScore * rScore * dScore * uScore;
     }
 
     private static boolean isTreeVisible(Integer value, List<String> right, List<String> left, List<String> up, List<String> down) {
