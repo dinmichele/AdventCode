@@ -1,14 +1,13 @@
 package my;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.*;
 
@@ -28,6 +27,12 @@ public class AdventCode2022 {
         day4();
         System.out.println("********************* DAY 5 *********************");
         day5();
+        System.out.println("********************* DAY 6 *********************");
+        day6();
+        System.out.println("********************* DAY 7 *********************");
+        day7();
+        System.out.println("********************* DAY 8 *********************");
+        day8();
     }
 
     /**
@@ -469,5 +474,275 @@ public class AdventCode2022 {
 
     }
 
+    /**
+     * Day 6
+     * The preparations are finally complete; you and the Elves leave camp on foot and begin to make your way toward the star fruit grove.
+     *
+     * As you move through the dense undergrowth, one of the Elves gives you a handheld device. He says that it has many fancy features, but the most important one to set up right now is the communication system.
+     *
+     * However, because he's heard you have significant experience dealing with signal-based systems, he convinced the other Elves that it would be okay to give you their one malfunctioning device - surely you'll have no problem fixing it.
+     *
+     * As if inspired by comedic timing, the device emits a few colorful sparks.
+     *
+     * To be able to communicate with the Elves, the device needs to lock on to their signal. The signal is a series of seemingly-random characters that the device receives one at a time.
+     *
+     * To fix the communication system, you need to add a subroutine to the device that detects a start-of-packet marker in the datastream. In the protocol being used by the Elves, the start of a packet is indicated by a sequence of four characters that are all different.
+     *
+     * The device will send your subroutine a datastream buffer (your puzzle input); your subroutine needs to identify the first position where the four most recently received characters were all different. Specifically, it needs to report the number of characters from the beginning of the buffer to the end of the first such four-character marker.
+     *
+     * For example, suppose you receive the following datastream buffer:
+     *
+     * mjqjpqmgbljsphdztnvjfqwrcgsmlb
+     * After the first three characters (mjq) have been received, there haven't been enough characters received yet to find the marker. The first time a marker could occur is after the fourth character is received, making the most recent four characters mjqj. Because j is repeated, this isn't a marker.
+     *
+     * The first time a marker appears is after the seventh character arrives. Once it does, the last four characters received are jpqm, which are all different. In this case, your subroutine should report the value 7, because the first start-of-packet marker is complete after 7 characters have been processed.
+     *
+     * Here are a few more examples:
+     *
+     * bvwbjplbgvbhsrlpgdmjqwftvncz: first marker after character 5
+     * nppdvjthqldpwncqszvftbrmjlhg: first marker after character 6
+     * nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg: first marker after character 10
+     * zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 11
+     * How many characters need to be processed before the first start-of-packet marker is detected?
+     *
+     * --- Part Two ---
+     * Your device's communication system is correctly detecting packets, but still isn't working. It looks like it also needs to look for messages.
+     *
+     * A start-of-message marker is just like a start-of-packet marker, except it consists of 14 distinct characters rather than 4.
+     *
+     * Here are the first positions of start-of-message markers for all of the above examples:
+     *
+     * mjqjpqmgbljsphdztnvjfqwrcgsmlb: first marker after character 19
+     * bvwbjplbgvbhsrlpgdmjqwftvncz: first marker after character 23
+     * nppdvjthqldpwncqszvftbrmjlhg: first marker after character 23
+     * nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg: first marker after character 29
+     * zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 26:
+     *
+     * How many characters need to be processed before the first start-of-message marker is detected?
+     * @throws IOException
+     */
+    public static void day6() throws IOException {
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day6.txt"));
 
+        int responseValue = identifyPacketStarterPosition(input.get(0).toCharArray(), 4,0);
+
+        System.out.println("Solution Day 6:" + responseValue);
+
+        responseValue = identifyPacketStarterPosition(input.get(0).toCharArray(), 14,0);
+
+        System.out.println("Solution Day 6 - Part2 :" + responseValue);
+
+    }
+
+    private static int identifyPacketStarterPosition(char[] chars, int tokeSize, int start){
+        Set<Character> singlePacketValue = new HashSet<>();
+        for (int i=0; i<tokeSize; i++) {
+            singlePacketValue.add(chars[start + i]);
+        }
+
+        if (singlePacketValue.size() < tokeSize) {
+            return identifyPacketStarterPosition(chars, tokeSize, start + 1);
+        } else {
+            return start + tokeSize;
+        }
+    }
+
+    static int lastVisitedPosition = 1;
+    static String dirName = "";
+    public static void day7() throws IOException {
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day7.txt"));
+
+        Map<String, Integer> dirSizes = new HashMap<>();
+
+        while (lastVisitedPosition < input.size()) {
+            determineFolderSize (input, dirName, 0,  dirSizes);
+        }
+
+        List sortedKeys=new ArrayList(dirSizes.keySet());
+        Collections.sort(sortedKeys);
+
+        AtomicReference<Integer> result = new AtomicReference<>(0);
+        sortedKeys.forEach(k -> {
+            if (dirSizes.get(k) <= 100000){
+                result.updateAndGet(v -> v + dirSizes.get(k));
+            }
+        });
+
+        //FIXME: it works on the example, but it doesn't work on full input
+        System.out.println("Solution Day 7 - Num of directories: " +  result);
+    }
+
+    private static int determineFolderSize(List<String> input, String dirName, int size, Map<String, Integer> dirSizes){
+
+        if (lastVisitedPosition >= input.size()){
+            lastVisitedPosition++;
+            return size;
+        }
+
+        if (input.get(lastVisitedPosition).startsWith("$ ls")) {
+            lastVisitedPosition++;
+            return size + determineFolderSize(input, dirName, size, dirSizes);
+        }
+
+        if (input.get(lastVisitedPosition).startsWith("dir") ){
+
+            lastVisitedPosition++;
+            return size + determineFolderSize(input, dirName, size, dirSizes);
+        } else {
+            if (input.get(lastVisitedPosition).startsWith("$ cd .")){
+                dirSizes.put(dirName, size);
+                lastVisitedPosition++;
+                return size;
+            } else {
+                if (input.get(lastVisitedPosition).startsWith("$ cd")){
+
+                    Matcher matcher = Pattern.compile(".* (\\w+)").matcher(input.get(lastVisitedPosition));
+                    matcher.find();
+                    dirName +=  "/" + matcher.group(1);
+                    lastVisitedPosition++;
+                    size = size + determineFolderSize(input, dirName, size, dirSizes);
+                    dirSizes.put(dirName, size);
+                    return size;
+                } else {
+                    Matcher matcher = Pattern.compile("\\d+").matcher(input.get(lastVisitedPosition));
+                    matcher.find();
+                    int singleFileSize = Integer.valueOf(matcher.group());
+                    lastVisitedPosition++;
+                    return size + singleFileSize + determineFolderSize(input, dirName, size, dirSizes);
+                }
+            }
+        }
+
+        //return size;
+
+    }
+
+    /**
+     * --- Day 8: Treetop Tree House ---
+     * The expedition comes across a peculiar patch of tall trees all planted carefully in a grid. The Elves explain that a previous expedition planted these trees as a reforestation effort. Now, they're curious if this would be a good location for a tree house.
+     *
+     * First, determine whether there is enough tree cover here to keep a tree house hidden. To do this, you need to count the number of trees that are visible from outside the grid when looking directly along a row or column.
+     *
+     * The Elves have already launched a quadcopter to generate a map with the height of each tree (your puzzle input). For example:
+     *
+     * 30373
+     * 25512
+     * 65332
+     * 33549
+     * 35390
+     * Each tree is represented as a single digit whose value is its height, where 0 is the shortest and 9 is the tallest.
+     *
+     * A tree is visible if all of the other trees between it and an edge of the grid are shorter than it. Only consider trees in the same row or column; that is, only look up, down, left, or right from any given tree.
+     *
+     * All of the trees around the edge of the grid are visible - since they are already on the edge, there are no trees to block the view. In this example, that only leaves the interior nine trees to consider:
+     *
+     * The top-left 5 is visible from the left and top. (It isn't visible from the right or bottom since other trees of height 5 are in the way.)
+     * The top-middle 5 is visible from the top and right.
+     * The top-right 1 is not visible from any direction; for it to be visible, there would need to only be trees of height 0 between it and an edge.
+     * The left-middle 5 is visible, but only from the right.
+     * The center 3 is not visible from any direction; for it to be visible, there would need to be only trees of at most height 2 between it and an edge.
+     * The right-middle 3 is visible from the right.
+     * In the bottom row, the middle 5 is visible, but the 3 and 4 are not.
+     * With 16 trees visible on the edge and another 5 visible in the interior, a total of 21 trees are visible in this arrangement.
+     *
+     * Consider your map; how many trees are visible from outside the grid?
+     *
+     * Your puzzle answer was 1782.
+     *
+     * The first half of this puzzle is complete! It provides one gold star: *
+     *
+     * --- Part Two ---
+     * Content with the amount of tree cover available, the Elves just need to know the best spot to build their tree house: they would like to be able to see a lot of trees.
+     *
+     * To measure the viewing distance from a given tree, look up, down, left, and right from that tree; stop if you reach an edge or at the first tree that is the same height or taller than the tree under consideration. (If a tree is right on the edge, at least one of its viewing distances will be zero.)
+     *
+     * The Elves don't care about distant trees taller than those found by the rules above; the proposed tree house has large eaves to keep it dry, so they wouldn't be able to see higher than the tree house anyway.
+     *
+     * In the example above, consider the middle 5 in the second row:
+     *
+     * 30373
+     * 25512
+     * 65332
+     * 33549
+     * 35390
+     * Looking up, its view is not blocked; it can see 1 tree (of height 3).
+     * Looking left, its view is blocked immediately; it can see only 1 tree (of height 5, right next to it).
+     * Looking right, its view is not blocked; it can see 2 trees.
+     * Looking down, its view is blocked eventually; it can see 2 trees (one of height 3, then the tree of height 5 that blocks its view).
+     * A tree's scenic score is found by multiplying together its viewing distance in each of the four directions. For this tree, this is 4 (found by multiplying 1 * 1 * 2 * 2).
+     *
+     * However, you can do even better: consider the tree of height 5 in the middle of the fourth row:
+     *
+     * 30373
+     * 25512
+     * 65332
+     * 33549
+     * 35390
+     * Looking up, its view is blocked at 2 trees (by another tree with a height of 5).
+     * Looking left, its view is not blocked; it can see 2 trees.
+     * Looking down, its view is also not blocked; it can see 1 tree.
+     * Looking right, its view is blocked at 2 trees (by a massive tree of height 9).
+     * This tree's scenic score is 8 (2 * 2 * 1 * 2); this is the ideal spot for the tree house.
+     *
+     * Consider each tree on your map. What is the highest scenic score possible for any tree?
+     */
+    public static void day8() throws IOException {
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day8.txt"));
+        List<List<Integer>> rows = new ArrayList<>();
+        input.forEach(l -> {
+            String elements[] = l.split("");
+            rows.addAll(Collections.singleton(Arrays.stream(elements).map(e -> Integer.valueOf(e)).collect(toList())));
+
+        });
+
+        AtomicInteger rowIndex = new AtomicInteger();
+
+
+        AtomicInteger sum = new AtomicInteger();
+        rows.forEach(r -> {
+            int columnIndex = 0;
+
+            if (rowIndex.get() > 0 && rowIndex.get() < rows.size() -1){
+               for (int i=1; i<r.size() -1; i++) {
+                    columnIndex++;
+                    List<String> right = new ArrayList<>();
+                    List<String> left = new ArrayList<>();
+                    List<String> up = new ArrayList<>();
+                    List<String> down = new ArrayList<>();
+                    for (int j =columnIndex; j<(rows.get(rowIndex.get()).size() - 1); j++){
+                        right.add(String.valueOf(rows.get(rowIndex.get()).get(j + 1)));
+                    }
+                    for (int j=columnIndex; j>0; j--){
+                        left.add(String.valueOf(rows.get(rowIndex.get()).get(j - 1)));
+                    }
+                    for (int k = rowIndex.get() +1; k<(rows.size()); k++){
+                        down.add(String.valueOf(rows.get(k).get(columnIndex)));
+                    }
+                    for (int k = rowIndex.get(); k>0; k--){
+                        up.add(String.valueOf(rows.get(k-1).get(columnIndex)));
+                    }
+
+                    if (isTreeVisible(r.get(i), right, left, up, down )){
+                        sum.getAndIncrement();
+                    }
+
+                }
+
+            }
+            rowIndex.getAndIncrement();
+        });
+
+        int total = sum.get() + (rows.size() *2) + ((rows.get(0).size()-2)*2);
+        System.out.println("Day 8 result: " + total);
+
+    }
+
+    private static boolean isTreeVisible(Integer value, List<String> right, List<String> left, List<String> up, List<String> down) {
+        long l = left.stream().filter(e -> Integer.valueOf(e) < value).count();
+        long r = right.stream().filter(e -> Integer.valueOf(e) < value).count();
+        long u = up.stream().filter(e -> Integer.valueOf(e) < value).count();
+        long d = down.stream().filter(e -> Integer.valueOf(e) < value).count();
+
+        return l==left.size() || r==right.size() || u==up.size() || d==down.size();
+    }
 }
