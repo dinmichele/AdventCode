@@ -33,6 +33,8 @@ public class AdventCode2022 {
         day7();
         System.out.println("********************* DAY 8 *********************");
         day8();
+        System.out.println("********************* DAY 9 *********************");
+        day9();
     }
 
     /**
@@ -770,5 +772,120 @@ public class AdventCode2022 {
         long d = down.stream().filter(e -> Integer.valueOf(e) < value).count();
 
         return l==left.size() || r==right.size() || u==up.size() || d==down.size();
+    }
+
+    /**
+     * Day 9
+     * @throws IOException
+     */
+    public static void day9() throws IOException {
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day9.txt"));
+        List<List<String>> hMatrix = new ArrayList<>();
+        List<List<String>> tMatrix = new ArrayList<>();
+        List<String> tPositionHistory = new ArrayList<>();
+        AtomicInteger hCurrentPosX = new AtomicInteger(0);
+        AtomicInteger hCurrentPosY = new AtomicInteger(0);
+        AtomicInteger tCurrentPosX = new AtomicInteger(0);
+        AtomicInteger tCurrentPosY = new AtomicInteger(0);
+
+        //matrix[hCurrentPosX.get()][hCurrentPosY.get()] = "H"; //start position
+        hMatrix.add(hCurrentPosX.get(), Arrays.asList("H")); //start position
+        tMatrix.add(hCurrentPosX.get(), Arrays.asList("T")); //T start at same position
+        //tPositionHistory.add(tCurrentPosX.get() + " " +tCurrentPosY.get());
+
+        input.forEach(l -> {
+            String[] command = l.split(" ");
+            String direction = command[0];
+            Integer repetition = Integer.valueOf(command[1]);
+            for (int i = 0; i < repetition; i++) {
+                hMatrix.get(hCurrentPosX.get()).set(hCurrentPosY.get(), null);//remove current H location
+                switch (direction){
+                    case "R":
+                        hCurrentPosY.getAndIncrement();
+                        break;
+                    case "L":
+                        hCurrentPosY.getAndDecrement();
+                        break;
+                    case "U":
+                        hCurrentPosX.getAndIncrement();
+                        break;
+                    case "D":
+                        hCurrentPosX.getAndDecrement();
+                        break;
+                    default: throw new IllegalStateException("Direction not valid in the command");
+                }
+
+                if (hMatrix.size() <= hCurrentPosX.get()){
+                    hMatrix.removeAll(hMatrix);
+                    hMatrix.addAll((List) Arrays.asList(new ArrayList[hCurrentPosX.get() + 1]));
+                    //Arrays.asList(new List[hCurrentPosX.get() + 1]);
+                }
+                hMatrix.set(hCurrentPosX.get(), Arrays.asList(new String[hCurrentPosY.get() + 1]));
+                hMatrix.get(hCurrentPosX.get()).set(hCurrentPosY.get(), "H"); //put H in the new location (After command execution)
+                moveTAdjacentToH(tPositionHistory, tMatrix, hCurrentPosX, hCurrentPosY, tCurrentPosX, tCurrentPosY);
+
+            }
+
+        });
+        Set<String> uniquePositions = new HashSet<>(tPositionHistory);
+        System.out.println("Day 9 result:" + uniquePositions.size());
+
+    }
+
+    private static void moveTAdjacentToH(List<String> tPositionHistory, List<List<String>> tMatrix, AtomicInteger hCurrentPosX, AtomicInteger hCurrentPosY,
+                                         AtomicInteger tCurrentPosX, AtomicInteger tCurrentPosY) {
+
+        boolean isAdjacent = Math.abs(hCurrentPosX.get() - tCurrentPosX.get()) < 2 &&
+                             Math.abs(hCurrentPosY.get() - tCurrentPosY.get()) < 2;
+
+        if (!isAdjacent) { //move T
+
+           tMatrix.get(tCurrentPosX.get()).set(tCurrentPosY.get(), null);//remove current T location
+           Integer newX = tCurrentPosX.get();
+           Integer newY = tCurrentPosY.get();
+
+            if (hCurrentPosX.get() - tCurrentPosX.get() > 1) {
+                newX++;
+            } else if (hCurrentPosX.get() - tCurrentPosX.get() < -1){
+                newX--;
+            } else  if (hCurrentPosY.get() - tCurrentPosY.get() > 1) {
+                newY++;
+            } else if (hCurrentPosY.get() - tCurrentPosY.get() < -1) {
+                newY--;
+            } else {
+                // if the head and tail aren't touching and aren't in the same row or column,
+                //the tail always moves one step diagonally to keep up
+                if (Math.abs(hCurrentPosX.get() - tCurrentPosX.get()) == 2 &&
+                        Math.abs(hCurrentPosY.get() - tCurrentPosY.get()) == 1) {
+                    if (hCurrentPosX.get() > tCurrentPosX.get() || hCurrentPosY.get() > tCurrentPosY.get()) {
+                        newX++; newY++;
+                    } else {
+                        newX--; newY--;
+                    }
+                } else {
+                    if (Math.abs(hCurrentPosX.get() - tCurrentPosX.get()) == 1 &&
+                            Math.abs(hCurrentPosY.get() - tCurrentPosY.get()) == 2) {
+                        if (hCurrentPosX.get() > tCurrentPosX.get() || hCurrentPosY.get() > tCurrentPosY.get()) {
+                            newX++;
+                            newY++;
+                        } else {
+                            newX--;
+                            newY--;
+                        }
+                    }
+                }
+            }
+
+           if (tMatrix.size() <= newX){
+               tMatrix.removeAll(tMatrix);
+               tMatrix.addAll((List) Arrays.asList(new ArrayList[newX + 1]));
+           }
+           tMatrix.set(newX, Arrays.asList(new String[newY + 1]));
+           tMatrix.get(newX).set(newY, "T"); //put T in the new location
+           tCurrentPosX.set(newX);
+           tCurrentPosY.set(newY);
+        }
+
+        tPositionHistory.add(tCurrentPosX.get() + " " + tCurrentPosY.get());
     }
 }

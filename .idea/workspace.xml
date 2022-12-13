@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b7b2193-a495-447a-b721-78e160934688" name="Changes" comment="+ Day 8">
+      <change afterPath="$PROJECT_DIR$/resources/source_day9.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/source_day8.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/source_day8.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/my/AdventCode2022.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/my/AdventCode2022.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +57,13 @@
       <workItem from="1670489985209" duration="2964000" />
       <workItem from="1670573562239" duration="22295000" />
       <workItem from="1670604439079" duration="200000" />
-      <workItem from="1670622201102" duration="3070000" />
+      <workItem from="1670622201102" duration="3236000" />
+      <workItem from="1670657602164" duration="3850000" />
+      <workItem from="1670748112223" duration="3541000" />
+      <workItem from="1670826437138" duration="9275000" />
+      <workItem from="1670844215553" duration="3026000" />
+      <workItem from="1670851928842" duration="476000" />
+      <workItem from="1670861190028" duration="1765000" />
     </task>
     <task id="LOCAL-00001" summary="+ Day 5">
       <created>1670452334009</created>
@@ -73,7 +79,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670604491121</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="+ Day 8">
+      <created>1670625354783</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1670625354783</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,26 +122,33 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="+ Day 5" />
-    <option name="LAST_COMMIT_MESSAGE" value="+ Day 5" />
+    <MESSAGE value="+ Day 8" />
+    <option name="LAST_COMMIT_MESSAGE" value="+ Day 8" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/my/AdventCode2022.java</url>
-          <line>737</line>
-          <option name="timeStamp" value="42" />
+          <line>829</line>
+          <option name="timeStamp" value="55" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/my/AdventCode2022.java</url>
-          <line>762</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="54" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="tMatrix" />
+        <watch expression="hMatrix" />
+        <watch expression="tPositionHistory" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/AdventCode$AdventCode2022.ic" NAME="AdventCode2022 Coverage Results" MODIFIED="1670623359823" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/AdventCode$AdventCode2022.ic" NAME="AdventCode2022 Coverage Results" MODIFIED="1670862876314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>my.*</FILTER>
     </SUITE>
   </component>
