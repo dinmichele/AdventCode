@@ -35,6 +35,8 @@ public class AdventCode2022 {
         day8();
         System.out.println("********************* DAY 9 *********************");
         day9();
+        System.out.println("********************* DAY 10 *********************");
+        day10();
     }
 
     /**
@@ -887,5 +889,40 @@ public class AdventCode2022 {
         }
 
         tPositionHistory.add(tCurrentPosX.get() + " " + tCurrentPosY.get());
+    }
+
+    public static void day10() throws IOException {
+        List<String> input = Files.readAllLines(Paths.get("resources/source_day10.txt"));
+        List<Integer> valueHistory = new ArrayList<>();
+        valueHistory.add(1); //starting value
+        input.forEach(l -> {
+            String command[] = l.split(" ");
+            if (command[0].equals("addx")) {
+                valueHistory.add(valueHistory.get(valueHistory.size() - 1));
+                valueHistory.add(valueHistory.get(valueHistory.size() - 1) + Integer.valueOf(command[1]));
+            } else {
+                //noop
+                valueHistory.add(valueHistory.get(valueHistory.size() - 1));
+            }
+
+        });
+
+        System.out.println("Day 10 values:" + valueHistory);
+
+        Integer _20th= valueHistory.get(19) * 20;
+        Integer _60th= valueHistory.get(59) * 60;
+        Integer _100th= valueHistory.get(99) * 100;
+        Integer _140th= valueHistory.get(139) * 140;
+        Integer _180th= valueHistory.get(179) * 180;
+        Integer _220th= valueHistory.get(219) * 220;
+        System.out.println("20th " + _20th);
+        System.out.println("_60th " + _60th);
+        System.out.println("_100th " + _100th);
+        System.out.println("_140th " + _140th);
+        System.out.println("_180th " + _180th);
+        System.out.println("_220th " + _220th);
+
+        System.out.println("Day 10 result:" + Integer.valueOf(_20th+ _60th + _100th + _140th +_180th +_220th));
+
     }
 }

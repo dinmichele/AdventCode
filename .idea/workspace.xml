@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b7b2193-a495-447a-b721-78e160934688" name="Changes" comment="+ Day 8">
-      <change afterPath="$PROJECT_DIR$/resources/source_day9.txt" afterDir="false" />
+    <list default="true" id="8b7b2193-a495-447a-b721-78e160934688" name="Changes" comment="+ Day 9 (unsolved)">
+      <change afterPath="$PROJECT_DIR$/resources/source_day10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/my/RopeBridge.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/my/RopeBridge2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/my/AdventCode2022.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/my/AdventCode2022.java" afterDir="false" />
     </list>
@@ -10,6 +12,14 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="AnnotationType" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,6 +52,54 @@
       <recent name="C:\Projects\AdventCode\src" />
     </key>
   </component>
+  <component name="RunManager" selected="Application.AdventCode2022">
+    <configuration name="AdventCode2022" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="my.AdventCode2022" />
+      <module name="AdventCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="my.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RopeBridge" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="my.RopeBridge" />
+      <module name="AdventCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="my.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RopeBridge2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="my.RopeBridge2" />
+      <module name="AdventCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="my.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.AdventCode2022" />
+        <item itemvalue="Application.RopeBridge" />
+        <item itemvalue="Application.RopeBridge2" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -64,6 +122,12 @@
       <workItem from="1670844215553" duration="3026000" />
       <workItem from="1670851928842" duration="476000" />
       <workItem from="1670861190028" duration="1765000" />
+      <workItem from="1670913828744" duration="61000" />
+      <workItem from="1671015429850" duration="82000" />
+      <workItem from="1671310416619" duration="3833000" />
+      <workItem from="1671353630574" duration="798000" />
+      <workItem from="1672755874760" duration="1330000" />
+      <workItem from="1672834845451" duration="1765000" />
     </task>
     <task id="LOCAL-00001" summary="+ Day 5">
       <created>1670452334009</created>
@@ -86,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670625354783</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="+ Day 9 (unsolved)">
+      <created>1670913871616</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670913871616</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,15 +194,21 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="+ Day 5" />
     <MESSAGE value="+ Day 8" />
-    <option name="LAST_COMMIT_MESSAGE" value="+ Day 8" />
+    <MESSAGE value="+ Day 9 (unsolved)" />
+    <option name="LAST_COMMIT_MESSAGE" value="+ Day 9 (unsolved)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/my/AdventCode2022.java</url>
-          <line>829</line>
-          <option name="timeStamp" value="55" />
+          <line>909</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/my/AdventCode2022.java</url>
+          <line>898</line>
+          <option name="timeStamp" value="58" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
